@@ -10,9 +10,13 @@ using System.Threading.Tasks;
 namespace AdressBook.Services;
 
 
-public class ContactService(IFileService fileService) : IContactService
-
+public class ContactService : IContactService
 {
+    private readonly IFileService _fileService;
+    public ContactService(IFileService fileService)
+    {
+        _fileService = fileService;
+    }
 
     //private readonly IFileService _fileService = new FileService(@"C:\Agenda\AdressBook\content.json");
 
@@ -31,7 +35,7 @@ public class ContactService(IFileService fileService) : IContactService
             {
                 _contacts.Add(contact);
                 string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-                fileService.SaveContentToFile(_filePath, json);
+                _fileService.SaveContentToFile(_filePath, json);
                 return true;
 
             }
@@ -54,12 +58,12 @@ public class ContactService(IFileService fileService) : IContactService
     {
         try
         {
-            var content = fileService.GetContentFromFile(_filePath);
-            if (!string.IsNullOrEmpty(content))
+            var content1 = _fileService.GetContentFromFile(_filePath);
+            if (!string.IsNullOrEmpty(content1))
 
 
             {
-                _contacts = JsonConvert.DeserializeObject<List<IContact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
+                _contacts = JsonConvert.DeserializeObject<List<IContact>>(content1, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
                 return _contacts;
 
             }
@@ -92,8 +96,8 @@ public class ContactService(IFileService fileService) : IContactService
                 _contacts.Remove(contactToDelete);
 
                 string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-                fileService.SaveContentToFile(_filePath, json);
-
+                _fileService.SaveContentToFile(_filePath, json);
+                Debug.WriteLine($"Contact {email} deleted successfully. Updated contact list: {_contacts.Count} contacts.");
                 return true;
             }
             else
@@ -103,7 +107,7 @@ public class ContactService(IFileService fileService) : IContactService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
+            Debug.WriteLine($"Contact {email} not found in the list. No deletion performed.");
         }
         return false;
     }

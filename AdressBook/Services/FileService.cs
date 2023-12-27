@@ -23,12 +23,12 @@ public class FileService : IFileService
 
 
 
-    public bool SaveContentToFile(string filePath, string content)
+    public bool SaveContentToFile(string filePath, string content1)
     {
         try
         {
             using var sw = new StreamWriter(filePath);
-            sw.WriteLine(content);
+            sw.WriteLine(content1);
             return true;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }

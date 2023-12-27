@@ -12,10 +12,10 @@ public class FileServiceTest
         // Arrange
         IFileService fileService = new FileService();
         string filePath = @"C:\Agenda\AdressBook\content.json";
-        string content = "Test content";
+        string content1 = "Test content";
 
         // Act
-        bool result = fileService.SaveContentToFile(filePath, content);
+        bool result = fileService.SaveContentToFile(filePath, content1);
 
         // Assert
         Assert.True(result);
@@ -27,10 +27,10 @@ public class FileServiceTest
         // Arrange
         IFileService fileService = new FileService();
         string filePath = @"C:\Agenda\AdressBook\content.json";
-        string content = "Test content";
+        string content1 = "Test content";
 
         // Act
-        bool result = fileService.SaveContentToFile(filePath, content);
+        bool result = fileService.SaveContentToFile(filePath, content1);
 
         // Assert
         Assert.True(result);
