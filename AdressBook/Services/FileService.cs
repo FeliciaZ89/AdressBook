@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace AdressBook.Services;
 
-public interface IFileService
-{
-    bool SaveContentToFile(string content, string json);
-    string GetContentFromFile(string _filePath);
-}
 
 public class FileService : IFileService
 {
@@ -26,13 +21,27 @@ public class FileService : IFileService
         _filePath = filePath;
     }
 
-    public string GetContentFromFile(string _filePath)
+
+
+    public bool SaveContentToFile(string filePath, string content)
     {
         try
         {
-            if (File.Exists(_filePath))
+            using var sw = new StreamWriter(filePath);
+            sw.WriteLine(content);
+            return true;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
+    }
+
+    public string GetContentFromFile(string filePath)
+    {
+        try
+        {
+            if (File.Exists(filePath))
             {
-                return File.ReadAllText(_filePath);
+                return File.ReadAllText(filePath);
             }
         }
         catch (Exception ex)
@@ -41,18 +50,5 @@ public class FileService : IFileService
         }
         return null!;
     }
-
-    public bool SaveContentToFile(string filePath, string content)
-    {
-        try
-        {
-            File.WriteAllText(_filePath, content);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-        }
-        return false;
-    }
 }
+

@@ -1,6 +1,6 @@
 ﻿namespace AdressBook.Services
 {
-    public interface IFileService1
+    public interface IFileService
     {
        
 
@@ -18,6 +18,6 @@
         /// </summary>
         /// <param name="filePath">Enter the filepath with extension (c:\agenda\adressbook\content.json)</param>
         /// <returns>If the file exists,returns file content (as string) ,returns null if failed.</returns>
-        string GetContentFromFile(string _filePath);
+        string GetContentFromFile(string filePath);
     }
 }

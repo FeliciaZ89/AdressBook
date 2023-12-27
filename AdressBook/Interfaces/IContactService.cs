@@ -31,7 +31,7 @@ public interface IContactService
     /// <summary>
     /// Get all contacts from the contact list.
     /// </summary>
-    /// <returns>Show all contacts, else null.</returns>
+    /// <returns>Shows all contacts, else null.</returns>
 
     IEnumerable<IContact> GetAllContactsFromList();
 

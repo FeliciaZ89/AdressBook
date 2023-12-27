@@ -12,13 +12,15 @@ namespace AdressBook.Services;
 
 public class ContactService(IFileService fileService) : IContactService
 
-{ 
+{
+
+    //private readonly IFileService _fileService = new FileService(@"C:\Agenda\AdressBook\content.json");
+
+    public List<IContact> _contacts = [];
     private readonly string _filePath = @"C:\Agenda\AdressBook\content.json";
 
-     private readonly IFileService _fileService = new FileService(@"C:\Agenda\AdressBook\content.json");
-    private List<IContact> _contacts = [];
+   
 
-    public IFileService FileService { get; } = fileService;
 
     public bool AddContactToList(IContact contact)
     {
@@ -29,7 +31,7 @@ public class ContactService(IFileService fileService) : IContactService
             {
                 _contacts.Add(contact);
                 string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-                _fileService.SaveContentToFile(_filePath, json);
+                fileService.SaveContentToFile(_filePath, json);
                 return true;
 
             }
@@ -52,10 +54,10 @@ public class ContactService(IFileService fileService) : IContactService
     {
         try
         {
-            var content = _fileService.GetContentFromFile(_filePath);
+            var content = fileService.GetContentFromFile(_filePath);
             if (!string.IsNullOrEmpty(content))
 
-        
+
             {
                 _contacts = JsonConvert.DeserializeObject<List<IContact>>(content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
                 return _contacts;
@@ -88,8 +90,10 @@ public class ContactService(IFileService fileService) : IContactService
             if (contactToDelete != null)
             {
                 _contacts.Remove(contactToDelete);
+
                 string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-                _fileService.SaveContentToFile(_filePath, json);
+                fileService.SaveContentToFile(_filePath, json);
+
                 return true;
             }
             else
@@ -103,11 +107,12 @@ public class ContactService(IFileService fileService) : IContactService
         }
         return false;
     }
-
-
-
-
 }
+
+
+
+
+
 
 
 
