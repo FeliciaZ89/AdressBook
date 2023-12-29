@@ -34,7 +34,7 @@ public class ContactService_Tests
     {
         // Arrange
 
-        var json = "[{\"$type\":\"AdressBook.Models.Contact, AdressBook\",\"Id\":0,\"FirstName\":\"Felicia\",\"LastName\":\"Zidaru\",\"Email\":\"fely@domain.com\",\"PhoneNumber\":\"0736478572\",\"Adress\":\"Bjuv, Storgatan 2b\"}]";
+        var json = "[{\"$type\":\"AdressBook.Models.Contact, AdressBook\",\"Id\":4,\"FirstName\":\"Felicia\",\"LastName\":\"Zidaru\",\"Email\":\"fely@domain.com\",\"PhoneNumber\":\"0736478572\",\"Adress\":\"Bjuv, Storgatan 2\"}]";
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns(json);
         IContactService contactService = new ContactService(mockFileService.Object);
@@ -47,7 +47,7 @@ public class ContactService_Tests
         Assert.NotNull(result);
         Assert.True(result.Any());
         IContact returnedContact = result.FirstOrDefault()!;
-        Assert.Equal(0, returnedContact.Id);
+        Assert.Equal(4, returnedContact.Id);
     }
 
 
@@ -57,7 +57,7 @@ public void ContactDetailOption_GetASingleContactFromContactList_ThenReturnConta
     // Arrange
     var contacts = new List<IContact>
     {
-        new Contact { Id = 0, FirstName = "Felicia", LastName = "Zidaru", Email = "fely@domain.com", PhoneNumber = "0736478972", Adress = "Bjuv, Storgatan 2b" }
+        new Contact { Id = 4, FirstName = "Felicia", LastName = "Zidaru", Email = "fely@domain.com", PhoneNumber = "0736478572", Adress = "Bjuv, Storgatan 2B" }
     };
 
     var json = JsonConvert.SerializeObject(contacts, Formatting.None,
@@ -76,8 +76,9 @@ public void ContactDetailOption_GetASingleContactFromContactList_ThenReturnConta
     Assert.Equal("fely@domain.com", result.Email);
 }
 
-   
- 
+
+
+
 }
 
 
