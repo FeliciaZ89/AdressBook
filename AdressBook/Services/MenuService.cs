@@ -107,6 +107,7 @@ namespace AdressBook.Services
             Console.Write("Adress: ");
             contact.Adress = Console.ReadLine()!;
 
+            
             var res = _contactService.AddContactToList(contact);
 
 

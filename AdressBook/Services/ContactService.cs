@@ -10,22 +10,19 @@ using System.Threading.Tasks;
 namespace AdressBook.Services;
 
 
-public class ContactService : IContactService
+public class ContactService: IContactService
 {
     private readonly IFileService _fileService;
+
     public ContactService(IFileService fileService)
     {
         _fileService = fileService;
     }
 
-    //private readonly IFileService _fileService = new FileService(@"C:\Agenda\AdressBook\content.json");
-
-    public List<IContact> _contacts = [];
     private readonly string _filePath = @"C:\Agenda\AdressBook\content.json";
-
-   
-
-
+ 
+    public List<IContact> _contacts = [];
+    
     public bool AddContactToList(IContact contact)
     {
 
@@ -33,9 +30,10 @@ public class ContactService : IContactService
         {
             if (!_contacts.Any(x => x.Email == contact.Email))
             {
+                contact.Id = _contacts.Count + 1;
                 _contacts.Add(contact);
-                string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-                _fileService.SaveContentToFile(_filePath, json);
+                var json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+               _fileService.SaveContentToFile(_filePath, json);
                 return true;
 
             }
@@ -63,11 +61,11 @@ public class ContactService : IContactService
 
 
             {
-                _contacts = JsonConvert.DeserializeObject<List<IContact>>(content1, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All })!;
-                return _contacts;
-
+                _contacts = JsonConvert.DeserializeObject<List<IContact>>(content1, new JsonSerializerSettings
+                { TypeNameHandling = TypeNameHandling.All })!;
+               
             }
-
+            return _contacts;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -97,7 +95,7 @@ public class ContactService : IContactService
 
                 string json = JsonConvert.SerializeObject(_contacts, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
                 _fileService.SaveContentToFile(_filePath, json);
-                Debug.WriteLine($"Contact {email} deleted successfully. Updated contact list: {_contacts.Count} contacts.");
+                Debug.WriteLine($"Contact deleted successfully.");
                 return true;
             }
             else
@@ -107,7 +105,7 @@ public class ContactService : IContactService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Contact {email} not found in the list. No deletion performed.");
+            Debug.WriteLine($"Contact not found.");
         }
         return false;
     }

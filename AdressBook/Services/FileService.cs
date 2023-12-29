@@ -21,8 +21,6 @@ public class FileService : IFileService
         _filePath = filePath;
     }
 
-
-
     public bool SaveContentToFile(string filePath, string content1)
     {
         try

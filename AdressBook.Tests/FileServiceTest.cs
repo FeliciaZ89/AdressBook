@@ -11,7 +11,7 @@ public class FileServiceTest
     {
         // Arrange
         IFileService fileService = new FileService();
-        string filePath = @"C:\Agenda\AdressBook\content.json";
+        string filePath = @"C:\Agenda\AdressBook\testcontent.txt";
         string content1 = "Test content";
 
         // Act
@@ -26,7 +26,7 @@ public class FileServiceTest
     {
         // Arrange
         IFileService fileService = new FileService();
-        string filePath = @"C:\Agenda\AdressBook\content.json";
+        string filePath = @"C:\Agenda\AdressBook\testcontent.txt";
         string content1 = "Test content";
 
         // Act

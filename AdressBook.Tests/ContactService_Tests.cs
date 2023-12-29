@@ -19,11 +19,8 @@ public class ContactService_Tests
         //Arrange
 
         IContact contact = new Contact { FirstName = "Felicia", LastName = "Zidaru", Email = "fely@domain.com", PhoneNumber = "0736478972", Adress = "Bjuv, Storgatan 2b" };
-
-
-        var mockData = new Mock<IFileService>();
-        IContactService contactService = new ContactService(mockData.Object);
-
+        var mockFileService = new Mock<IFileService>();
+        IContactService contactService = new ContactService(mockFileService.Object);
 
         //Act
 
@@ -33,47 +30,15 @@ public class ContactService_Tests
     }
 
     [Fact]
-    public void ContactDetailOption_GetASingleContactFromContactList_ThenReturnContactList()
-    {
-        // Arrange
-        var contacts = new List<IContact>
-        {
-            new Contact { FirstName = "Felicia", LastName = "Zidaru", Email = "fely@domain.com", PhoneNumber ="0736478972", Adress = "Bjuv, Storgatan 2b" },
-
-        };
-
-        string json = JsonConvert.SerializeObject(contacts, Formatting.None,
-              new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-
-        var mockFileService = new Mock<IFileService>();
-        mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns(json);
-
-        IContactService contactService = new ContactService(mockFileService.Object);
-
-        // Act
-        var result = contactService.ContactDetailOption("fely@domain.com");
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal("fely@domain.com", result.Email);
-    }
-
-    [Fact]
     public void GetAllContactsFromListShould_GetAllContactFromContactsList_ThenReturnTheListOfContacts()
     {
         // Arrange
-        var contacts = new List<IContact> {
-         new Contact { FirstName = "Felicia", LastName = "Zidaru", Email = "fely@domain.com", PhoneNumber = "0736478972", Adress = "Bjuv, Storgatan 2b" }
-        
-    };
 
-        string json = JsonConvert.SerializeObject(contacts, Formatting.None,
-            new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-
+        var json = "[{\"$type\":\"AdressBook.Models.Contact, AdressBook\",\"Id\":0,\"FirstName\":\"Felicia\",\"LastName\":\"Zidaru\",\"Email\":\"fely@domain.com\",\"PhoneNumber\":\"0736478572\",\"Adress\":\"Bjuv, Storgatan 2b\"}]";
         var mockFileService = new Mock<IFileService>();
         mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns(json);
-
         IContactService contactService = new ContactService(mockFileService.Object);
+
 
         // Act
         IEnumerable<IContact> result = contactService.GetAllContactsFromList();
@@ -81,7 +46,37 @@ public class ContactService_Tests
         // Assert
         Assert.NotNull(result);
         Assert.True(result.Any());
+        IContact returnedContact = result.FirstOrDefault()!;
+        Assert.Equal(0, returnedContact.Id);
     }
+
+
+    [Fact]
+public void ContactDetailOption_GetASingleContactFromContactList_ThenReturnContactList()
+{
+    // Arrange
+    var contacts = new List<IContact>
+    {
+        new Contact { Id = 0, FirstName = "Felicia", LastName = "Zidaru", Email = "fely@domain.com", PhoneNumber = "0736478972", Adress = "Bjuv, Storgatan 2b" }
+    };
+
+    var json = JsonConvert.SerializeObject(contacts, Formatting.None,
+          new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+
+    var mockFileService = new Mock<IFileService>();
+    mockFileService.Setup(x => x.GetContentFromFile(It.IsAny<string>())).Returns(json);
+
+    IContactService contactService = new ContactService(mockFileService.Object);
+
+    // Act
+    var result = contactService.ContactDetailOption("fely@domain.com");
+
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal("fely@domain.com", result.Email);
+}
+
+   
  
 }
 
